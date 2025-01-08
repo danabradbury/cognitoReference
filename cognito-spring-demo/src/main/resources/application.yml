@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: spring-boot-aws-cognito
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XvvGolH0y
+  logging:
+    root: INFO
+    web: DEBUG
+    com.bradbury.dana.cognito.demo: DEBUG
+    org:
+        springframework:
+          security: DEBUG

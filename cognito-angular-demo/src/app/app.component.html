@@ -1,0 +1,27 @@
+<main>
+  <div>
+    <h1>Hello, {{ title }}</h1>
+      <p>Congratulations! Your app is running. 🎉</p>
+
+      <div *ngIf="isAuthenticated; else notAuthenticated">
+        <h2>Welcome! You are logged in.</h2>
+        <p>User Data:</p>
+        <pre>{{ userData$ | async | json }}</pre> 
+
+        <button (click)="logout()">Logout</button>
+      </div>
+  
+      <ng-template #notAuthenticated>
+        <h2>Please log in</h2>
+        <button (click)="login()">Login</button>
+      </ng-template>
+
+      <!-- Render ProtectedComponent here -->
+      <app-protected></app-protected>
+
+      
+
+  </div>
+</main>
+
+<router-outlet />
