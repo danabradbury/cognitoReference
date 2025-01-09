@@ -41,6 +41,24 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     // Logs out on Cognito and redirects back to postLogoutRedirectUri
-    this.oidcSecurityService.logoff();
+    
+    // this approach is not working, the logout happens but cognito is 
+    // redirecting to the login url, which is not the expected behavior
+    /* console.log('Logging out');
+    this.oidcSecurityService.logoff().subscribe((result) => {
+      console.log('Logged out', result);
+      //window.location.href = 'http://localhost:4200'; // Redirect to home page
+    }); */
+
+    // this block came from the cognito getting started, it does work, 
+    // but I need to clean up the hardcoded values
+
+    // Clear session storage
+    if (window.sessionStorage) {
+      window.sessionStorage.clear();
+    }
+  
+    window.location.href = "https://us-east-1xvvgolh0y.auth.us-east-1.amazoncognito.com/logout?client_id=61food7rnfk6501lg535p182it&logout_uri=http://localhost:4200"; 
+
   }
 }

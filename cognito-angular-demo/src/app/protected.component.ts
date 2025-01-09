@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [ CommonModule ],
   template: `
     <button (click)="callBackend()">Call Secured Endpoint</button>
-    <p *ngIf="response">{{ response }}</p>
+    <p *ngIf="response">{{ response | json }}</p>
   `,
 })
 export class ProtectedComponent {
@@ -21,7 +21,10 @@ export class ProtectedComponent {
         this.response = data;
         console.log('Secured endpoint response:', data);
       },
-      error: (err) => console.error('Secured endpoint error:', err),
+      error: (err) => {
+        console.error('Secured endpoint error:', err);
+        this.response = `Error: ${err.message}`;
+      },
     });
   }
 }

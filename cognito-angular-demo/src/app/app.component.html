@@ -11,16 +11,17 @@
         <button (click)="logout()">Logout</button>
       </div>
   
-      <ng-template #notAuthenticated>
-        <h2>Please log in</h2>
-        <button (click)="login()">Login</button>
-      </ng-template>
+      <div>
+        <ng-template #notAuthenticated>
+          <h2>Please log in</h2>
+          <button (click)="login()">Login</button>
+        </ng-template>
+      </div>
 
-      <!-- Render ProtectedComponent here -->
-      <app-protected></app-protected>
-
-      
-
+      <div>
+        <!-- this should only work if the user is logged in -->
+        <app-protected></app-protected>
+      </div>
   </div>
 </main>
 
