@@ -6,7 +6,7 @@ export const authConfig: PassedInitialConfig = {
               redirectUrl: 'http://localhost:4200/auth-callback',
               postLogoutRedirectUri: 'http://localhost:4200',
               clientId: '61food7rnfk6501lg535p182it',
-              scope: 'phone openid email',
+              scope: 'profile openid email',
               responseType: 'code',
               silentRenew: true,
               useRefreshToken: true,
