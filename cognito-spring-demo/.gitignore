@@ -32,10 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
-# terraform files
+### Terraform ###
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
 *.tfstate
-*.tfstate.backup
-*.tfvars
-*.tfplan
-*.tfout
-*/.terraform/*
+*.tfstate.*
+*.plan

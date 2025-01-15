@@ -41,10 +41,11 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# terraform files
+### Terraform ###
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
 *.tfstate
-*.tfstate.backup
-*.tfvars
-*.tfplan
-*.tfout
-*/.terraform/*
+*.tfstate.*
+*.plan
