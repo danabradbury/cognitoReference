@@ -30,3 +30,21 @@ replay_pid*
 *.tfplan
 *.tfout
 */.terraform/*
+
+# ignore all files in the .idea folder
+.idea/*
+
+# ignore all files in the .vscode folder
+.vscode/*
+
+# ignore angular build files
+dist/*
+node_modules/*
+.angular/*
+
+# ignore mavens build files
+target/*
+*.iml
+*.ipr
+*.iws
+.mvn/*
