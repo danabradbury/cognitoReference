@@ -23,13 +23,15 @@
 hs_err_pid*
 replay_pid*
 
-# ignore terraform files
+### Terraform ###
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
 *.tfstate
-*.tfstate.backup
-*.tfvars
-*.tfplan
-*.tfout
-*/.terraform/*
+*.tfstate.*
+*.plan
+
 
 # ignore all files in the .idea folder
 .idea/*
