@@ -17,6 +17,20 @@ export class CallbackComponent implements OnInit {
         this.oidcSecurityService.checkAuth().subscribe({
             next: ({ isAuthenticated }) => {
               if (isAuthenticated) {
+
+                // log the access and ID token to the console
+                this.oidcSecurityService.userData$.subscribe(userData => {
+                  console.log('userData received at callback:', userData);
+                  // can I decod the JWT token at run time in the client?
+                  //let decoded = jwt_decode(userData.access_token);
+                });
+                this.oidcSecurityService.getAccessToken().subscribe(accessToken => {
+                  console.log('accessToken received at callback:', accessToken);
+                });
+                this.oidcSecurityService.getIdToken().subscribe(idToken => {  
+                  console.log('idToken received at callback:', idToken);
+                });
+
                 this.router.navigate(['/']);
               } else {
                 // handle the case when it's NOT an error but user is not authenticated

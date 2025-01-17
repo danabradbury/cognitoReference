@@ -4,6 +4,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProtectedComponent } from './protected.component';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,8 @@ export class AppComponent implements OnInit {
 
   // Observables exposed by the library
   userData$!: Observable<any>;
+  accessToken$!: Observable<any>;
+  idToken$!: Observable<any>;
   isAuthenticated = false;
 
   ngOnInit(): void {
@@ -32,6 +35,10 @@ export class AppComponent implements OnInit {
 
     // This stream emits the decoded ID token claims (if any)
     this.userData$ = this.oidcSecurityService.userData$;
+    
+    // used just show the user the tokens for demo purposes
+    this.accessToken$ = this.oidcSecurityService.getAccessToken();
+    this.idToken$ = this.oidcSecurityService.getIdToken();
   }
 
   login(): void {
@@ -40,19 +47,6 @@ export class AppComponent implements OnInit {
   }
 
   logout(): void {
-    // Logs out on Cognito and redirects back to postLogoutRedirectUri
-    
-    // this approach is not working, the logout happens but cognito is 
-    // redirecting to the login url, which is not the expected behavior
-    /* console.log('Logging out');
-    this.oidcSecurityService.logoff().subscribe((result) => {
-      console.log('Logged out', result);
-      //window.location.href = 'http://localhost:4200'; // Redirect to home page
-    }); */
-
-    // this block came from the cognito getting started, it does work, 
-    // but I need to clean up the hardcoded values
-
     // Clear session storage
     if (window.sessionStorage) {
       window.sessionStorage.clear();
@@ -61,4 +55,13 @@ export class AppComponent implements OnInit {
     window.location.href = "https://us-east-1xvvgolh0y.auth.us-east-1.amazoncognito.com/logout?client_id=61food7rnfk6501lg535p182it&logout_uri=http://localhost:4200"; 
 
   }
+
+  getDecodedAccessToken(token: string): String {
+      try {
+
+        return JSON.stringify(jwtDecode(token), null, 4);
+      } catch(Error) {
+        return "null";
+      }
+    }
 }

@@ -14,6 +14,16 @@ variable "google_client_secret" {
   type        = string
 }
 
+variable "varsity_oidc_client_id" {
+  description = "Varsity OIDC Client ID"
+  type        = string
+}
+
+variable "varsity_oidc_client_secret" {
+  description = "Varsity OIDC Client Secret"
+  type        = string
+}
+
 variable "aws_cognito_user_pool_name" {
   description = "name of the cognito user pool"
   type        = string

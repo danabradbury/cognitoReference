@@ -2,6 +2,8 @@
 
 This is a demo project illustrating how to integrate **Amazon Cognito** with an **Angular** front-end and a **Spring Boot** back-end. Users can create an account, log in, and then use the **access token** to call protected endpoints in the Spring service.
 
+The cognito service can be cogfigured to authenticate users using a variety of methods, including social logins, SAML, and OpenID Connect. This demo focuses on the **Authorization Code Grant** flow, where the Angular app redirects users to the Cognito Hosted UI to enter their credentials.  While testing the demo, cognito was successfully configured to authenicate against a user pool, google, and Microsoft Azure AD (EID Connect) using the OIDC pattern (SAML could also be used to connect to a microsoft domain).
+
 ---
 
 ## Prerequisites
@@ -27,23 +29,15 @@ This is a demo project illustrating how to integrate **Amazon Cognito** with an 
 
 The application is composed of:
 
-- **Angular App**: Manages UI, user registration, and login via **Cognito** using the [`angular-auth-oidc-client`](https://github.com/damienbod/angular-auth-oidc-client) library.  
-- **Spring Boot REST API**: Validates **JWT** tokens (access tokens from Cognito) and provides protected endpoints.  
-- **Cognito**: Hosts the sign-in page (Hosted UI), issues tokens upon successful authentication.
+- **Angular App**: Basic UI provides login, logout, and GET request to secure endpoint. Links to Hosted User registration, and login via **Cognito** using the [`angular-auth-oidc-client`](https://github.com/damienbod/angular-auth-oidc-client) library.  
+- **Spring Boot REST API**: Provides sample protected REST endpoints. Spring Security intercepts and validates **JWT** tokens (access tokens from Cognito) before routing to protected endpoints.  
+- **Cognito**: Hosts the sign-in page and user sign-up (Hosted UI), issues tokens upon successful authentication.
 
-### Sequence Diagram
+### High-Level Architecture
 
-    Angular App->>Cognito: Initiate Login
-    Cognito->>Angular App: Redirect to Cognito Hosted UI
-    Angular App->>Cognito Hosted UI: User enters credentials
-    Cognito Hosted UI->>Cognito: Authenticate user
-    Cognito->>Cognito Hosted UI: Return authorization code
-    Cognito Hosted UI->>Angular App: Redirect to app with code
-    Angular App->>Cognito: Exchange code for tokens
-    Cognito->>Angular App: Return access and ID tokens
-    Angular App->>Spring Boot: Call protected endpoints with access token
+![alt text](cognito-demo-high-level-overview.png)
 
-    The Angular app’s OIDC flow:
+### Basic OAuth Sequence Diagram - using Authorization Code Grant and Cognito user pool
 
 - **The user clicks Login in the Angular app.**
 - **The app redirects the user to the Cognito Hosted UI to enter credentials.**
@@ -53,13 +47,14 @@ The application is composed of:
 - **The Angular app attaches the access token in the Authorization header for any protected API calls.**
 - **The Spring Boot back-end validates the token using Cognito’s JWKS endpoint.**
 
+if the user chooses to login with an external provider, the flow is similar, but the user is redirected to the social provider’s login page instead of the Cognito Hosted UI.
+
 ## Quick Start: How to Clone & Run
 
 1. Clone the Repository
 
-2. Configure Cognito Details
-    Angular configuration file (e.g., src/app/auth.config.ts):
-
+2. Configure Cognito Details in the Angular configuration file (e.g., src/app/auth.config.ts):
+```
     export const authConfig: AuthConfig = {
     authority: 'https://<your-cognito-domain>.auth.<region>.amazoncognito.com',
     clientId: '<your-cognito-app-client-id>',
@@ -68,9 +63,9 @@ The application is composed of:
     scope: 'openid profile email',
     responseType: 'code',
     // ...
-    };
-
-    Spring Boot application.yml (or .properties):
+};
+```
+3. Configure Spring Security Details in Spring Boot application.yml (or .properties):
 
         spring:
             security:
@@ -85,24 +80,24 @@ The application is composed of:
     - Allowed Logout URLs must match the postLogoutRedirectUri.
     - Enable "Authorization code grant" and "Use a refresh token."
 
-3. Run the Spring Boot App
+4. Run the Spring Boot App
 
     - mvn spring-boot:run
     - Your API should start on http://localhost:8080.
     - Alternatively, use your IDE’s Spring Boot runner.
 
-4. Run the Angular App
+5. Run the Angular App
 
     - npm install
     - ng serve (or whatever your preferred Angular build command is)
     - Access the Angular app at http://localhost:4200.
     - Click Login to go through the Cognito Hosted UI and log in.
 
-5. Test the Protected Endpoints
+6. Test the Protected Endpoints
 
     - Sign up or log in with your Cognito user account.
-    - Once authenticated, the Angular app retrieves an access token.
-    - Try calling a protected endpoint using the smaple button . You should see a successful response if your token is valid.
+    - Once authenticated, the Angular app retrieves an access token.  You should see the user data as well as both the decoded access and id tokens. 
+    - Try calling a protected endpoint using the sample button . You should see a successful response if your token is valid.  Logout, try the endpoint again, you should recieve a 401 unauthorized response.
 
 ## Troubleshooting
 

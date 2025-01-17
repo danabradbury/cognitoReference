@@ -8,6 +8,12 @@
         <p>User Data:</p>
         <pre>{{ userData$ | async | json }}</pre> 
 
+        <p>Access Token:</p>
+        <pre>{{ getDecodedAccessToken(accessToken$ | async | json )}}</pre> 
+
+        <p>ID Token:</p>
+        <pre>{{ getDecodedAccessToken(idToken$ | async | json )}}</pre> 
+
         <button (click)="logout()">Logout</button>
       </div>
   
